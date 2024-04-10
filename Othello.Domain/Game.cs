@@ -4,6 +4,7 @@ namespace Othello.Domain;
 
 public class Game
 {
+    public Guid Id { get; private set; } 
     public Board Board { get; private set; }
     public Player CurrentPlayer { get; private set; }
     private Player OpponentPlayer { get; set; }
@@ -17,6 +18,7 @@ public class Game
 
     public Game(Player player1, Player player2, IGameViewUpdater observer)
     {
+        Id = Guid.NewGuid();
         Board = new Board();
         CurrentPlayer = player1;
         OpponentPlayer = player2;
@@ -162,10 +164,11 @@ public class Game
             Winner = null;
     }
 
-    public void ShowHints()
+    public IEnumerable<(int, int)> ShowHints()
     {
         var hints = Board.GetAvailableMoves(CurrentPlayer.Color);
         _observer.DisplayBoard(Board.Cells, hints);
+        return hints;
     }
 
     public void PerformRandomMove()
@@ -183,7 +186,7 @@ public class Game
         }
     }
 
-    public void UndoMove()
+    public bool UndoMove()
     {
         if (_moveHistory.Any())
         {
@@ -201,12 +204,17 @@ public class Game
                 NotifyObservers($"Undo successful. It's now {CurrentPlayer.Color}'s turn again.");
                 UpdateBoardView();
                 NotifyPlayerTurn(CurrentPlayer);
+                return true;
             }
-            else
-            {
-                // If more than 3 seconds have passed, do not allow the undo
-                NotifyObservers("Undo not allowed. More than 3 seconds have passed since the last move.");
-            }
+
+            // If more than 3 seconds have passed, do not allow the undo
+            NotifyObservers("Undo not allowed. More than 3 seconds have passed since the last move.");
+            return false;
         }
+
+        // If more than no moves were made have passed, do not allow the undo
+        NotifyObservers("Undo not allowed. No moves were made in the game.");
+        return false;
+        
     }
 }

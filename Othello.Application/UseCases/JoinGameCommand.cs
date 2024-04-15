@@ -27,12 +27,13 @@ public class JoinGameCommandHandler : IRequestHandler<JoinGameCommand, JoinGameR
 
     public async Task<JoinGameResult> Handle(JoinGameCommand request, CancellationToken cancellationToken)
     {
-        var joined = await _gameRepository.JoinGameAsync(request.GameId, request.UserId);
-        
+        // Assuming JoinGameAsync now updates a GameSession object
+        var sessionUpdated = await _gameRepository.JoinGameSessionAsync(request.GameId, request.UserId);
+    
         return new JoinGameResult
         {
-            GameJoined = joined,
-            Message = joined ? "Joined game successfully." : "Failed to join game."
+            GameJoined = sessionUpdated,
+            Message = sessionUpdated ? "Joined game successfully." : "Failed to join game."
         };
     }
 }

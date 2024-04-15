@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Othello.Application", "Othe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Othello.Infrastructure", "Othello.Infrastructure\Othello.Infrastructure.csproj", "{FFE88973-C0BC-4C5B-A141-0B7766982A9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Domain", "Web.Domain\Web.Domain.csproj", "{FC7E3783-5E65-4C14-AA23-21156736A29E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{FFE88973-C0BC-4C5B-A141-0B7766982A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFE88973-C0BC-4C5B-A141-0B7766982A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFE88973-C0BC-4C5B-A141-0B7766982A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7E3783-5E65-4C14-AA23-21156736A29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7E3783-5E65-4C14-AA23-21156736A29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7E3783-5E65-4C14-AA23-21156736A29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7E3783-5E65-4C14-AA23-21156736A29E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Othello.Domain\Othello.Domain.csproj" />
+      <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
     </ItemGroup>
 
 </Project>

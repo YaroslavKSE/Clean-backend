@@ -1,4 +1,4 @@
-﻿using Othello.Domain;
+﻿using Web.Domain;
 
 namespace Othello.Application.Interfaces;
 

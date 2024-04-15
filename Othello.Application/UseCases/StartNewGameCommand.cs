@@ -28,13 +28,14 @@ public class StartNewGameCommandHandler : IRequestHandler<StartNewGameCommand, S
 
     public async Task<StartNewGameResult> Handle(StartNewGameCommand request, CancellationToken cancellationToken)
     {
-        var gameId = await _gameCreationService.CreateGame(request.UserId, request.OpponentType, request.OpponentName);
-        
+        // Create a new GameSession with the appropriate player and opponent
+        var gameSessionId = await _gameCreationService.CreateGameSession(request.UserId, request.OpponentType, request.OpponentName);
+    
         return new StartNewGameResult
         {
-            GameStarted = gameId != Guid.Empty,
-            GameId = gameId,
-            Message = gameId != Guid.Empty ? "Game started successfully." : "Failed to start game."
+            GameStarted = gameSessionId != Guid.Empty,
+            GameId = gameSessionId,
+            Message = gameSessionId != Guid.Empty ? "Game started successfully." : "Failed to start game."
         };
     }
 }

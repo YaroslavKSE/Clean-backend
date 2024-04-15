@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Othello.Application.Interfaces;
+using Othello.Infrastructure.GameServices;
 using Othello.Infrastructure.UserServices;
 
 namespace Othello.Infrastructure;
@@ -13,6 +14,8 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUserExistChecker, UserExistChecker>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IGameCreator, GameCreator>();
+        services.AddScoped<IGameRepository, GameRepository>();
 
         // Add other infrastructure-specific services like database context, external services, etc.
 

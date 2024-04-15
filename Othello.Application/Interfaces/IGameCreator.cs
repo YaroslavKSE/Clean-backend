@@ -2,5 +2,5 @@
 
 public interface IGameCreator
 {
-    Task<Guid> CreateGame(string userId, string opponentType, string opponentName);
+    Task<Guid> CreateGameSession(string userId, string opponentType, string opponentName);
 }

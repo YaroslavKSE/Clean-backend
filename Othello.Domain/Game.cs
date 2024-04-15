@@ -4,7 +4,6 @@ namespace Othello.Domain;
 
 public class Game
 {
-    public Guid Id { get; private set; } 
     public Board Board { get; private set; }
     public Player CurrentPlayer { get; private set; }
     private Player OpponentPlayer { get; set; }
@@ -18,7 +17,6 @@ public class Game
 
     public Game(Player player1, Player player2, IGameViewUpdater observer)
     {
-        Id = Guid.NewGuid();
         Board = new Board();
         CurrentPlayer = player1;
         OpponentPlayer = player2;

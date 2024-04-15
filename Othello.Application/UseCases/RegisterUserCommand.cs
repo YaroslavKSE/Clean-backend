@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Othello.Application.Interfaces;
-using Othello.Domain;
+using Web.Domain;
 
 namespace Othello.Application.UseCases;
 

@@ -25,17 +25,16 @@ public class GetWaitingGamesQueryHandler : IRequestHandler<GetWaitingGamesQuery,
 
     public async Task<IEnumerable<GameInfo>> Handle(GetWaitingGamesQuery request, CancellationToken cancellationToken)
     {
-        // Logic to retrieve games that are waiting for an opponent
-        var waitingGames = await _gameRepository.GetWaitingGamesAsync();
-        
-        // Transform the collection of Game objects to GameInfo DTOs
-        var waitingGamesList = waitingGames.ToList();
-        var gameInfos = waitingGamesList.Select(game => new GameInfo
+        // Retrieve waiting game sessions
+        var waitingGameSessions = await _gameRepository.GetWaitingGameSessionsAsync();
+
+        // Transform the collection of GameSession objects to GameInfo DTOs
+        var waitingGamesInfo = waitingGameSessions.Select(session => new GameInfo
         {
-            GameId = game.Id, // Assuming you add an Id property to your Game class
-            PlayerUsername = game.CurrentPlayer.Color.ToString() // Assuming CurrentPlayer has a Username property
+            GameId = session.GameId,
+            PlayerUsername = session.Players.FirstOrDefault()?.Username ?? "Waiting Player"
         });
-        
-        return gameInfos;
+
+        return waitingGamesInfo;
     }
 }

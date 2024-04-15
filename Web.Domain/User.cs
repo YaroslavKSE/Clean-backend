@@ -1,4 +1,4 @@
-﻿namespace Othello.Domain;
+﻿namespace Web.Domain;
 
 public class User
 {

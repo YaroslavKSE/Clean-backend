@@ -6,16 +6,23 @@ namespace Othello.Infrastructure.UserServices;
 
 public class UserStorage : IUserStorage
 {
+    private readonly InMemoryDatabase _db;
+
+    public UserStorage(InMemoryDatabase db)
+    {
+        _db = db;
+    }
+
     public async Task<bool> AddAsync(User user)
     {
-        if (await InMemoryDatabase.ExistsUserAsync(user.Username))
+        if (await _db.ExistsUserAsync(user.Username))
             return false;  // User already exists
-        await InMemoryDatabase.AddUserAsync(user);
+        await _db.AddUserAsync(user);
         return true;
     }
 
     public Task<User?> FindByUsernameAsync(string username)
     {
-        return InMemoryDatabase.GetUserByUsernameAsync(username);
+        return _db.GetUserByUsernameAsync(username);
     }
 }

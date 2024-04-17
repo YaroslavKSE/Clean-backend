@@ -12,10 +12,10 @@ namespace Othello.Application.Sessions
         public DateTime StartTime { get; private set; }
         public bool IsGameOver => Game.IsGameOver;
 
-        public GameSession(Player player1, Player player2, IGameViewUpdater observer, PlayerInfo player1Info, PlayerInfo? player2Info = null)
+        public GameSession(PlayerInfo player1Info, PlayerInfo? player2Info, IGameViewUpdater observer)
         {
             GameId = Guid.NewGuid();
-            Game = new Game(player1, player2, observer);
+            Game = new Game(player1Info.OthelloPlayer, player1Info.OthelloPlayer, observer);
             StartTime = DateTime.UtcNow;
             Players.Add(player1Info); // Add first player info
             if (player2Info != null)

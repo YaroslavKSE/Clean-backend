@@ -1,23 +1,32 @@
 using Othello.Application.GameInterfaces;
 using Othello.Application.Sessions;
-using Othello.Domain;
 
 namespace Othello.Infrastructure.GameServices;
 
 public class GameRepository : IGameRepository
 {
-    public Task<IEnumerable<GameSession>> GetWaitingGameSessionsAsync()
+    private readonly InMemoryDatabase _db;
+
+    public GameRepository(InMemoryDatabase db)
     {
-        throw new NotImplementedException();
+        _db = db;
     }
 
-    public Task<bool> JoinGameSessionAsync(Guid gameId, PlayerInfo player)
+    public async Task<IEnumerable<GameSession>> GetWaitingGameSessionsAsync()
     {
-        throw new NotImplementedException();
+        var waitingSessions = await _db.GetWaitingGameSessionsAsync();
+        return waitingSessions;
     }
 
-    public Task<GameSession?> GetGameSessionByIdAsync(Guid gameId)
+    public async Task<bool> JoinGameSessionAsync(Guid gameId, PlayerInfo player)
     {
-        throw new NotImplementedException();
+        var joined = await _db.JoinGameSessionAsync(gameId, player);
+        return joined;
+    }
+
+    public async Task<GameSession?> GetGameSessionByIdAsync(Guid gameId)
+    {
+        var session = await _db.GetGameSessionByIdAsync(gameId);
+        return session;
     }
 }

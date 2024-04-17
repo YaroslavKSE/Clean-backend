@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<InMemoryDatabase>();
 builder.Services.AddInfrastructureServices(); 
 builder.Services.AddApplicationServices();
 

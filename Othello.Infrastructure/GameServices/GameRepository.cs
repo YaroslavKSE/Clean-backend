@@ -1,21 +1,22 @@
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
+using Othello.Application.Sessions;
 using Othello.Domain;
 
 namespace Othello.Infrastructure.GameServices;
 
 public class GameRepository : IGameRepository
 {
-    public Task<IEnumerable<Game>> GetWaitingGamesAsync()
+    public Task<IEnumerable<GameSession>> GetWaitingGameSessionsAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> JoinGameAsync(Guid gameId, string userId)
+    public Task<bool> JoinGameSessionAsync(Guid gameId, PlayerInfo player)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Game?> GetGameByIdAsync(Guid gameId)
+    public Task<GameSession?> GetGameSessionByIdAsync(Guid gameId)
     {
         throw new NotImplementedException();
     }

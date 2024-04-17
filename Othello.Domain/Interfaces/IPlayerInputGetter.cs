@@ -2,5 +2,5 @@
 
 public interface IPlayerInputGetter
 {
-    (int, int) GetMoveInput();
+    Task<(int row, int col)> WaitForMoveAsync(Guid gameId);
 }

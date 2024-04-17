@@ -1,7 +1,6 @@
 ﻿using Othello.Application.Sessions;
-using Othello.Domain;
 
-namespace Othello.Application.Interfaces;
+namespace Othello.Application.GameInterfaces;
 
 public interface IGameRepository
 {
@@ -9,8 +8,8 @@ public interface IGameRepository
     Task<IEnumerable<GameSession>> GetWaitingGameSessionsAsync();
 
     // Joins an existing game that is waiting for an opponent
-    Task<bool> JoinGameSessionAsync(Guid gameId, string userId);
+    Task<bool> JoinGameSessionAsync(Guid gameId, PlayerInfo player);
 
     // Retrieves a game by its unique identifier
-    Task<Game?> GetGameByIdAsync(Guid gameId);
+    Task<GameSession?> GetGameSessionByIdAsync(Guid gameId);
 }

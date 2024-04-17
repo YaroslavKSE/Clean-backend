@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Othello.Application.Sessions;
 using Othello.Domain;
 using Web.Domain;
 
@@ -7,12 +8,12 @@ namespace Othello.Infrastructure;
 public class InMemoryDatabase
 {
     // Using ConcurrentDictionary for thread-safe operations
-    private static readonly ConcurrentDictionary<Guid, Game> Games = new();
+    private static readonly ConcurrentDictionary<Guid, GameSession> Games = new();
     private static readonly ConcurrentDictionary<string, User> Users = new();
-    public static Task<Guid> AddGameAsync(Game game)
+    public static Task<Guid> AddGameAsync(GameSession game)
     {
         var gameId = Guid.NewGuid();
-        game.Id = gameId;
+        game.GameId = gameId;
         Games[gameId] = game;
         return Task.FromResult(gameId);
     }
@@ -23,16 +24,10 @@ public class InMemoryDatabase
     //     return Task.FromResult<IEnumerable<Game>>(waitingGames);
     // }
 
-    public static Task<Game?> GetGameByIdAsync(Guid gameId)
+    public static Task<GameSession?> GetGameByIdAsync(Guid gameId)
     {
         Games.TryGetValue(gameId, out var game);
         return Task.FromResult(game);
-    }
-
-    public static Task<bool> UpdateGameAsync(Game game)
-    {
-        Games[game.Id] = game;
-        return Task.FromResult(true);
     }
 
     // User Operations

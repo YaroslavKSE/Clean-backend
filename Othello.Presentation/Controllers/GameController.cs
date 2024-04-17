@@ -1,6 +1,6 @@
-﻿using Clean.Application.UseCases;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Othello.Application.PlayerInterfaces;
 using Othello.Application.UseCases;
 
 namespace Othello.Presentation.Controllers;
@@ -10,23 +10,33 @@ namespace Othello.Presentation.Controllers;
 public class GameController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private ApiPlayerInputGetter _inputGetter;
+    private ApiUndoRequestListener _undoRequestListener;
 
-    public GameController(IMediator mediator)
+    public GameController(IMediator mediator, ApiPlayerInputGetter inputGetter, ApiUndoRequestListener undoRequestListener)
     {
         _mediator = mediator;
+        _inputGetter = inputGetter;
+        _undoRequestListener = undoRequestListener;
     }
     
     [HttpPost("new")]
     public async Task<IActionResult> StartNewGame(StartNewGameCommand command)
     {
         var result = await _mediator.Send(command);
-        if (result.GameStarted)
+        if (result.GameId != Guid.Empty)
         {
-            return StatusCode(201, result);
+            if (result.GameStarted)
+            {
+                return StatusCode(201, new { result.GameId, Message = "Game started successfully with the bot." });
+            }
+
+            return StatusCode(201, new { result.GameId, Message = "Game session created. Waiting for another player to join." });
         }
 
-        return BadRequest("Could not start a new game.");
+        return BadRequest("Failed to create game session.");
     }
+
     
     [HttpGet("waiting")]
     public async Task<IActionResult> GetWaitingGames()
@@ -41,26 +51,26 @@ public class GameController : ControllerBase
         var result = await _mediator.Send(command);
         if (result.GameJoined)
         {
-            return Ok(result);
+            return Ok(new {result.Message });
         }
-    
-        return BadRequest("Could not join the game.");
+
+        return BadRequest(result.Message);
     }
+
     
     [HttpPost("{gameId}/move")]
-    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, MakeMoveCommand command)
+    public IActionResult MakeMove(Guid gameId, [FromBody] int row, int col)
     {
-        command.GameId = gameId;
-        var result = await _mediator.Send(command);
-        return result.IsValid ? (IActionResult)Ok(result) : BadRequest("Invalid move.");
+        _inputGetter.SetMove(gameId, row, col);
+        return Ok();
     }
     
     [HttpPost("{gameId}/undo")]
-    public async Task<IActionResult> UndoMove([FromRoute] Guid gameId, UndoMoveCommand command)
+    public IActionResult RequestUndo(Guid gameId)
     {
-        command.GameId = gameId;
-        var result = await _mediator.Send(command);
-        return result.MoveUndone ? (IActionResult)Ok("Move undone.") : BadRequest("Cannot undo move.");
+        // Set undo in the undo service
+        _undoRequestListener.RequestUndo(gameId);
+        return Ok("Undo request submitted.");
     }
     
     [HttpGet("{gameId}/hint")]

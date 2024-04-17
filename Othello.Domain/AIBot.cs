@@ -13,10 +13,10 @@ public class AIBot : Player
     private readonly IUndoRequestListener _listener;
 
     // MakeMove is now an async method and returns a Task
-    public override async Task MakeMoveAsync(Game gameBoard)
+    public override async Task MakeMoveAsync(Guid gameId, Game gameBoard)
     {
         var cts = new CancellationTokenSource();
-        var undoRequestedTask = _listener.UndoKeyPressedAsync(cts.Token);
+        var undoRequestedTask = _listener.WaitForUndoAsync(gameId);  // Correct method name
         var simulateDelayTask = SimulateAiDelayAsync();
 
         var completedTask = await Task.WhenAny(undoRequestedTask, simulateDelayTask);

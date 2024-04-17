@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
 
-
-namespace Clean.Application.UseCases;
+namespace Othello.Application.UseCases;
 
 public class GetHintsQuery : IRequest<IEnumerable<(int Row, int Column)>>
 {
@@ -20,7 +19,7 @@ public class GetHintsQueryHandler : IRequestHandler<GetHintsQuery, IEnumerable<(
 
     public async Task<IEnumerable<(int Row, int Column)>> Handle(GetHintsQuery request, CancellationToken cancellationToken)
     {
-        var game = await _gameRepository.GetGameByIdAsync(request.GameId);
+        var game = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
         if (game == null)
         {
             return new List<(int, int)>(); // Or optionally throw an exception

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
+using Othello.Application.UserInterfaces;
 using Othello.Infrastructure.GameServices;
 using Othello.Infrastructure.UserServices;
 

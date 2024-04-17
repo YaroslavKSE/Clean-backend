@@ -1,6 +1,6 @@
 ﻿using Web.Domain;
 
-namespace Othello.Application.Interfaces;
+namespace Othello.Application.UserInterfaces;
 
 public interface IUserStorage
 {

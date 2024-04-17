@@ -1,4 +1,4 @@
-using Othello.Application.Interfaces;
+using Othello.Application.UserInterfaces;
 
 namespace Othello.Infrastructure.UserServices;
 

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
+using Othello.Application.UserInterfaces;
 
 namespace Othello.Application.UseCases;
 

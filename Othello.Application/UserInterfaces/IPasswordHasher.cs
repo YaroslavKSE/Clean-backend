@@ -1,4 +1,4 @@
-﻿namespace Othello.Application.Interfaces;
+﻿namespace Othello.Application.UserInterfaces;
 
 public interface IPasswordHasher
 {

@@ -1,13 +1,15 @@
 ﻿using MediatR;
-using System;
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
+using Othello.Application.PlayerInterfaces;
+using Othello.Application.Sessions;
+using Othello.Domain;
 
-namespace Clean.Application.UseCases;
+namespace Othello.Application.UseCases;
 
 public class JoinGameCommand : IRequest<JoinGameResult>
 {
     public Guid GameId { get; set; }
-    public string UserId { get; set; }
+    public string Username { get; set; }
 }
 
 public class JoinGameResult
@@ -27,13 +29,30 @@ public class JoinGameCommandHandler : IRequestHandler<JoinGameCommand, JoinGameR
 
     public async Task<JoinGameResult> Handle(JoinGameCommand request, CancellationToken cancellationToken)
     {
-        // Assuming JoinGameAsync now updates a GameSession object
-        var sessionUpdated = await _gameRepository.JoinGameSessionAsync(request.GameId, request.UserId);
-    
+        var session = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
+        if (session == null) return new JoinGameResult {GameJoined = false, Message = "Game session not found."};
+        // Check if the session already has two players
+        if (session.Players.Count >= 2)
+            return new JoinGameResult {GameJoined = false, Message = "Game session is already full."};
+
+        // Assuming the second player info is passed with the request or created here
+        var secondPlayerInfo =
+            new PlayerInfo(request.Username, new HumanPlayer(CellState.Black, new ApiPlayerInputGetter()));
+        session.Players.Add(secondPlayerInfo);
+
+        // If this is the second player joining, start the game
+        if (session.Players.Count == 2)
+        {
+            session.StartGame(); // Start the game now that both players are present
+            await _gameRepository.JoinGameSessionAsync(session.GameId,
+                secondPlayerInfo); // Update the session in the repository
+        }
+
         return new JoinGameResult
         {
-            GameJoined = sessionUpdated,
-            Message = sessionUpdated ? "Joined game successfully." : "Failed to join game."
+            GameJoined = true,
+            Message = "Joined game successfully. " +
+                      (session.Players.Count == 2 ? "Game started." : "Waiting for another player.")
         };
     }
 }

@@ -1,12 +1,15 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
+using Othello.Application.PlayerInterfaces;
+using Othello.Domain.Interfaces;
 
 namespace Othello.Application.UseCases;
 
 public class MakeMoveCommand : IRequest<MakeMoveResult>
 {
     public Guid GameId { get; set; }
-    public string UserId { get; set; }
+    public string Username { get; set; }
+
     public int Row { get; set; }
     public int Column { get; set; }
 }
@@ -20,26 +23,24 @@ public class MakeMoveResult
 public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveResult>
 {
     private readonly IGameRepository _gameRepository;
+    private readonly IPlayerInputGetter _inputGetter;
 
-    public MakeMoveCommandHandler(IGameRepository gameRepository)
+    public MakeMoveCommandHandler(IGameRepository gameRepository, IPlayerInputGetter inputGetter)
     {
         _gameRepository = gameRepository;
+        _inputGetter = inputGetter;
     }
 
     public async Task<MakeMoveResult> Handle(MakeMoveCommand request, CancellationToken cancellationToken)
     {
-        var game = await _gameRepository.GetGameByIdAsync(request.GameId);
-        if (game == null)
-        {
-            return new MakeMoveResult { IsValid = false, Message = "Game not found." };
-        }
-        
-        var moveMade = game.MakeMove(request.Row, request.Column);
-        if (!moveMade)
-        {
-            return new MakeMoveResult { IsValid = false, Message = "Invalid move." };
-        }
+        var session = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
+        if (session == null) return new MakeMoveResult {IsValid = false, Message = "Game session not found."};
 
-        return new MakeMoveResult { IsValid = true, Message = "Move made successfully." };
+        var currentPlayer = session.Players.FindByUserId(request.Username);
+        if (session.Game.CurrentPlayer != currentPlayer?.OthelloPlayer)
+            return new MakeMoveResult {IsValid = false, Message = "Not your turn."};
+
+        await currentPlayer.OthelloPlayer.MakeMoveAsync(request.GameId, session.Game);
+        return new MakeMoveResult {IsValid = true, Message = "Move made successfully."};
     }
 }

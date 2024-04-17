@@ -1,6 +1,5 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
-using Othello.Domain;
+using Othello.Application.GameInterfaces;
 
 namespace Othello.Application.UseCases;
 
@@ -32,7 +31,7 @@ public class GetWaitingGamesQueryHandler : IRequestHandler<GetWaitingGamesQuery,
         var waitingGamesInfo = waitingGameSessions.Select(session => new GameInfo
         {
             GameId = session.GameId,
-            PlayerUsername = session.Players.FirstOrDefault()?.Username ?? "Waiting Player"
+            PlayerUsername = session.Players.FirstOrDefault()?.WebUsername ?? "Waiting Player"
         });
 
         return waitingGamesInfo;

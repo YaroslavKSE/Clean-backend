@@ -11,12 +11,12 @@ public class HumanPlayer : Player
 
     private readonly IPlayerInputGetter _inputGetter;
 
-    public override Task MakeMoveAsync(Game gameBoard)
+    public override async Task MakeMoveAsync(Guid gameId, Game gameBoard)
     {
-        var (row, col) = _inputGetter.GetMoveInput();
+        var (row, col) = await _inputGetter.WaitForMoveAsync(gameId);
         gameBoard.MakeMove(row - 1, col - 1);
-        return Task.CompletedTask;
     }
+
 
     public override string GetTurnMessageNotification()
     {

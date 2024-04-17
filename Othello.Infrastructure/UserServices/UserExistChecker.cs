@@ -1,11 +1,18 @@
-using Othello.Application.Interfaces;
+using Othello.Application.UserInterfaces;
 
 namespace Othello.Infrastructure.UserServices;
 
 public class UserExistChecker : IUserExistChecker
 {
-    public Task<bool> ExistsAsync(string id)
+    private readonly InMemoryDatabase _db;
+
+    public UserExistChecker(InMemoryDatabase db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+
+    public Task<bool> ExistsAsync(string username)
+    {
+        return _db.ExistsUserAsync(username);
     }
 }

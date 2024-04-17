@@ -1,16 +1,17 @@
-using Othello.Application.Interfaces;
+using Othello.Application.UserInterfaces;
 
 namespace Othello.Infrastructure.UserServices;
 
 public class PasswordHasher : IPasswordHasher
 {
+    
     public string HashPassword(string password)
     {
-        throw new NotImplementedException();
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
     public bool VerifyPassword(string userPassword, string providedPassword)
     {
-        throw new NotImplementedException();
+        return BCrypt.Net.BCrypt.Verify(providedPassword, userPassword);
     }
 }

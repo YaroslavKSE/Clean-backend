@@ -213,6 +213,5 @@ public class Game
         // If more than no moves were made have passed, do not allow the undo
         NotifyObservers("Undo not allowed. No moves were made in the game.");
         return false;
-        
     }
 }

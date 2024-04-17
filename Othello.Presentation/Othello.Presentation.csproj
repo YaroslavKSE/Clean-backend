@@ -9,20 +9,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="MediatR" Version="12.2.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Othello.Application\Othello.Application.csproj" />
-      <ProjectReference Include="..\Othello.Infrastructure\Othello.Infrastructure.csproj" />
+        <ProjectReference Include="..\Othello.Application\Othello.Application.csproj"/>
+        <ProjectReference Include="..\Othello.Infrastructure\Othello.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

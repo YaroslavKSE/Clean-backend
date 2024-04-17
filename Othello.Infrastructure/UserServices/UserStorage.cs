@@ -1,18 +1,28 @@
-using Othello.Application.Interfaces;
-using Othello.Domain;
+using Othello.Application.UserInterfaces;
 using Web.Domain;
 
 namespace Othello.Infrastructure.UserServices;
 
 public class UserStorage : IUserStorage
 {
-    public Task<bool> AddAsync(User user)
+    private readonly InMemoryDatabase _db;
+
+    public UserStorage(InMemoryDatabase db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+    
+    public async Task<bool> AddAsync(User user)
+    {
+        if (await _db.ExistsUserAsync(user.Username))
+            return false; // User already exists
+        
+        await _db.AddUserAsync(user);
+        return true;
     }
 
-    public Task<User> FindByUsernameAsync(string userId)
+    public Task<User?> FindByUsernameAsync(string username)
     {
-        throw new NotImplementedException();
+        return _db.GetUserByUsernameAsync(username);
     }
 }

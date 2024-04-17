@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
+using Othello.Application.GameInterfaces;
 
 namespace Othello.Application.UseCases;
 
 public class StartNewGameCommand : IRequest<StartNewGameResult>
 {
-    public string UserId { get; set; }
+    public string Username { get; set; }
     public string OpponentType { get; set; } // "player" or "cpu"
-    public string OpponentName { get; set; } // Optional
+
 }
 
 public class StartNewGameResult
@@ -28,14 +28,29 @@ public class StartNewGameCommandHandler : IRequestHandler<StartNewGameCommand, S
 
     public async Task<StartNewGameResult> Handle(StartNewGameCommand request, CancellationToken cancellationToken)
     {
+        
         // Create a new GameSession with the appropriate player and opponent
-        var gameSessionId = await _gameCreationService.CreateGameSession(request.UserId, request.OpponentType, request.OpponentName);
-    
+        var gameSession =
+            await _gameCreationService.CreateGameSession(request.Username, request.OpponentType);
+
+        // If the opponent is a bot, start the game immediately
+        if (request.OpponentType.ToLower() == "bot")
+        {
+            gameSession.StartGame(); // This method would start the game
+            return new StartNewGameResult
+            {
+                GameStarted = true,
+                GameId = gameSession.GameId,
+                Message = "Game started successfully with a bot."
+            };
+        }
+
+        // If the opponent is another player, the game waits for another player to join
         return new StartNewGameResult
         {
-            GameStarted = gameSessionId != Guid.Empty,
-            GameId = gameSessionId,
-            Message = gameSessionId != Guid.Empty ? "Game started successfully." : "Failed to start game."
+            GameStarted = false, // Game not started yet, waiting for another player
+            GameId = gameSession.GameId,
+            Message = "Game session created. Waiting for another player to join."
         };
     }
 }

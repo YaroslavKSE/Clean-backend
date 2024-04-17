@@ -2,5 +2,6 @@
 
 public interface IUndoRequestListener
 {
-    Task<bool> UndoKeyPressedAsync(CancellationToken ctsToken);
+    Task<bool> WaitForUndoAsync(Guid gameId);
+    void RequestUndo(Guid gameId);
 }

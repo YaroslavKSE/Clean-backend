@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Othello.Application.Interfaces;
+using Othello.Application.UserInterfaces;
 
 namespace Othello.Application.UseCases;
 
@@ -21,7 +21,8 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenGenerator _tokenGenerator;
 
-    public LoginUserCommandHandler(IUserStorage userStorage, IPasswordHasher passwordHasher, ITokenGenerator tokenGenerator)
+    public LoginUserCommandHandler(IUserStorage userStorage, IPasswordHasher passwordHasher,
+        ITokenGenerator tokenGenerator)
     {
         _userStorage = userStorage;
         _passwordHasher = passwordHasher;
@@ -33,12 +34,10 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
         var user = await _userStorage.FindByUsernameAsync(request.Username);
 
         if (user == null || !_passwordHasher.VerifyPassword(user.PasswordHash, request.Password))
-        {
-            return new LoginUserResult { UserAuthenticated = false };
-        }
+            return new LoginUserResult {UserAuthenticated = false};
 
         var token = _tokenGenerator.GenerateToken(user);
 
-        return new LoginUserResult { UserAuthenticated = true, Token = token };
+        return new LoginUserResult {UserAuthenticated = true, Token = token};
     }
 }

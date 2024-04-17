@@ -10,12 +10,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<InMemoryDatabase>();
-builder.Services.AddInfrastructureServices(); 
+builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 
-builder.Services.AddMediatR(cfg => 
+builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<Othello.Application.UseCases.LoginUserCommand>());
-builder.Services.AddMediatR(cfg => 
+builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<Othello.Presentation.Controllers.AuthController>());
 
 var app = builder.Build();

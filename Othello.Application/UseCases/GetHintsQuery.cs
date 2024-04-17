@@ -17,13 +17,11 @@ public class GetHintsQueryHandler : IRequestHandler<GetHintsQuery, IEnumerable<(
         _gameRepository = gameRepository;
     }
 
-    public async Task<IEnumerable<(int Row, int Column)>> Handle(GetHintsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<(int Row, int Column)>> Handle(GetHintsQuery request,
+        CancellationToken cancellationToken)
     {
         var game = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
-        if (game == null)
-        {
-            return new List<(int, int)>(); // Or optionally throw an exception
-        }
+        if (game == null) return new List<(int, int)>(); // Or optionally throw an exception
 
         // Assuming Game has a method to get hints for the current player
         var hints = game.ShowHints();

@@ -29,12 +29,13 @@ public class StartNewGameCommandHandler : IRequestHandler<StartNewGameCommand, S
     public async Task<StartNewGameResult> Handle(StartNewGameCommand request, CancellationToken cancellationToken)
     {
         // Create a new GameSession with the appropriate player and opponent
-        var gameSession = await _gameCreationService.CreateGameSession(request.UserId, request.OpponentType, request.OpponentName);
-        
+        var gameSession =
+            await _gameCreationService.CreateGameSession(request.UserId, request.OpponentType, request.OpponentName);
+
         // If the opponent is a bot, start the game immediately
         if (request.OpponentType.ToLower() == "cpu")
         {
-            gameSession.StartGame();  // This method would start the game
+            gameSession.StartGame(); // This method would start the game
             return new StartNewGameResult
             {
                 GameStarted = true,

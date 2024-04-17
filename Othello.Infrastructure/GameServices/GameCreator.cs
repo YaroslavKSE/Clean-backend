@@ -12,8 +12,9 @@ public class GameCreator : IGameCreator
     private readonly IPlayerInputGetter _playerInputGetter;
     private readonly IUndoRequestListener _undoRequestListener;
     // private readonly IGameViewUpdater _gameViewUpdater;
-    
-    public GameCreator(InMemoryDatabase db, IPlayerInputGetter playerInputGetter, IUndoRequestListener undoRequestListener)
+
+    public GameCreator(InMemoryDatabase db, IPlayerInputGetter playerInputGetter,
+        IUndoRequestListener undoRequestListener)
     {
         _db = db;
         _playerInputGetter = playerInputGetter;
@@ -22,18 +23,14 @@ public class GameCreator : IGameCreator
 
     public Task<GameSession> CreateGameSession(string userId, string opponentType, string opponentName)
     {
-        var player1 = new HumanPlayer(CellState.Black, _playerInputGetter); 
+        var player1 = new HumanPlayer(CellState.Black, _playerInputGetter);
         Player player2;
 
         if (opponentType.ToLower() == "cpu")
-        {
-            player2 = new AIBot(CellState.White, _undoRequestListener);  // Assume AI player
-        }
+            player2 = new AIBot(CellState.White, _undoRequestListener); // Assume AI player
         else
-        {
             // Create a placeholder for the second human player, which will be replaced when a real player joins
             player2 = new HumanPlayer(CellState.White, _playerInputGetter);
-        }
 
         var player1Info = new PlayerInfo(userId, player1);
         var player2Info = opponentType.ToLower() == "cpu" ? new PlayerInfo("AiBot", player2) : null;

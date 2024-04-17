@@ -16,7 +16,7 @@ public class AIBot : Player
     public override async Task MakeMoveAsync(Guid gameId, Game gameBoard)
     {
         var cts = new CancellationTokenSource();
-        var undoRequestedTask = _listener.WaitForUndoAsync(gameId);  // Correct method name
+        var undoRequestedTask = _listener.WaitForUndoAsync(gameId); // Correct method name
         var simulateDelayTask = SimulateAiDelayAsync();
 
         var completedTask = await Task.WhenAny(undoRequestedTask, simulateDelayTask);

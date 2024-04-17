@@ -10,11 +10,11 @@ public class InMemoryDatabase
     // Using ConcurrentDictionary for thread-safe operations
     private static readonly ConcurrentDictionary<Guid, GameSession> Games = new();
     private static readonly ConcurrentDictionary<string, User> Users = new();
-    
+
     // User Operations
     public Task AddUserAsync(User user)
     {
-        Users[user.Username] = user;  // Assumes User has a Username property
+        Users[user.Username] = user; // Assumes User has a Username property
         return Task.CompletedTask;
     }
 
@@ -28,11 +28,11 @@ public class InMemoryDatabase
     {
         return Task.FromResult(Users.ContainsKey(username));
     }
-    
+
     // GameSession Operations
     public Task AddGameSessionAsync(GameSession session)
     {
-        Games[session.GameId] = session;  // Overwrites existing session
+        Games[session.GameId] = session; // Overwrites existing session
         return Task.CompletedTask;
     }
 
@@ -46,14 +46,13 @@ public class InMemoryDatabase
     public Task<bool> JoinGameSessionAsync(Guid gameId, PlayerInfo player)
     {
         if (Games.TryGetValue(gameId, out var session))
-        {
             // Ensure the game is not full and is waiting for a player
             if (session.Players.Count < 2)
             {
                 session.Players.Add(player);
                 return Task.FromResult(true);
             }
-        }
+
         return Task.FromResult(false);
     }
 

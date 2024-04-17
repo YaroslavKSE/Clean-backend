@@ -9,10 +9,9 @@ public class MakeMoveCommand : IRequest<MakeMoveResult>
 {
     public Guid GameId { get; set; }
     public string Username { get; set; }
-    
+
     public int Row { get; set; }
     public int Column { get; set; }
-
 }
 
 public class MakeMoveResult
@@ -35,18 +34,13 @@ public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveR
     public async Task<MakeMoveResult> Handle(MakeMoveCommand request, CancellationToken cancellationToken)
     {
         var session = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
-        if (session == null)
-        {
-            return new MakeMoveResult { IsValid = false, Message = "Game session not found." };
-        }
+        if (session == null) return new MakeMoveResult {IsValid = false, Message = "Game session not found."};
 
         var currentPlayer = session.Players.FindByUserId(request.Username);
-        if (session.Game.CurrentPlayer != currentPlayer?.OthelloPlayer) 
-        {
-            return new MakeMoveResult { IsValid = false, Message = "Not your turn." };
-        }
+        if (session.Game.CurrentPlayer != currentPlayer?.OthelloPlayer)
+            return new MakeMoveResult {IsValid = false, Message = "Not your turn."};
 
         await currentPlayer.OthelloPlayer.MakeMoveAsync(request.GameId, session.Game);
-        return new MakeMoveResult { IsValid = true, Message = "Move made successfully." };
+        return new MakeMoveResult {IsValid = true, Message = "Move made successfully."};
     }
 }

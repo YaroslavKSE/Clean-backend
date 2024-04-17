@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="MediatR" Version="12.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Othello.Domain\Othello.Domain.csproj" />
-      <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
+        <ProjectReference Include="..\Othello.Domain\Othello.Domain.csproj"/>
+        <ProjectReference Include="..\Web.Domain\Web.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

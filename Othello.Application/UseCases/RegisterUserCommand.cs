@@ -24,10 +24,11 @@ public class RegisterUserUseCase : IRequestHandler<RegisterUserCommand, Register
     private readonly IUserExistChecker _userExistChecker;
 
     private readonly IUserStorage _userStorage;
-    
+
     private readonly IPasswordHasher _passwordHasher;
 
-    public RegisterUserUseCase(IUserExistChecker userExistChecker, IUserStorage userStorage, IPasswordHasher passwordHasher)
+    public RegisterUserUseCase(IUserExistChecker userExistChecker, IUserStorage userStorage,
+        IPasswordHasher passwordHasher)
     {
         _userExistChecker = userExistChecker;
         _userStorage = userStorage;
@@ -37,14 +38,12 @@ public class RegisterUserUseCase : IRequestHandler<RegisterUserCommand, Register
     public async Task<RegisterUserResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         if (await _userExistChecker.ExistsAsync(request.Username))
-        {
-            return new RegisterUserResult { UserExists = true, Message = "User already exists." };
-        }
+            return new RegisterUserResult {UserExists = true, Message = "User already exists."};
         var hashedPassword = _passwordHasher.HashPassword(request.Password);
         var user = new User(request.Username, hashedPassword, request.Email);
 
         await _userStorage.AddAsync(user);
 
-        return new RegisterUserResult { UserCreated = true, Message = "User created successfully." };
+        return new RegisterUserResult {UserCreated = true, Message = "User created successfully."};
     }
 }

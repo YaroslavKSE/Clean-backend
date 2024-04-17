@@ -16,7 +16,7 @@ public class UserStorage : IUserStorage
     public async Task<bool> AddAsync(User user)
     {
         if (await _db.ExistsUserAsync(user.Username))
-            return false;  // User already exists
+            return false; // User already exists
         await _db.AddUserAsync(user);
         return true;
     }

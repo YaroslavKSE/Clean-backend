@@ -1,5 +1,6 @@
 using Othello.Domain;
 using Othello.Domain.Interfaces;
+using Web.Domain;
 
 namespace Othello.Application.Sessions
 {
@@ -7,7 +8,6 @@ namespace Othello.Application.Sessions
     {
         public Guid GameId { get; set; }
         public Game Game { get; private set; }
-        // Store player information in a list
         public List<PlayerInfo> Players { get; private set; } = [];
         public DateTime StartTime { get; private set; }
         public bool IsGameOver => Game.IsGameOver;
@@ -37,16 +37,13 @@ namespace Othello.Application.Sessions
 
     public class PlayerInfo
     {
-        public Guid PlayerId { get; set; }
-        public string Username { get; set; }
-        public bool IsAI { get; set; }
+        public string WebUsername { get; set; }
+        public Player OthelloPlayer { get; set; }
 
-        public PlayerInfo(Guid playerId, string username, bool isAI)
+        public PlayerInfo(string username, Player player)
         {
-            PlayerId = playerId;
-            Username = username;
-            IsAI = isAI;
+            WebUsername = username;
+            OthelloPlayer = player;
         }
     }
-    
 }

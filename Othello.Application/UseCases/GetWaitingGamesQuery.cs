@@ -31,7 +31,7 @@ public class GetWaitingGamesQueryHandler : IRequestHandler<GetWaitingGamesQuery,
         var waitingGamesInfo = waitingGameSessions.Select(session => new GameInfo
         {
             GameId = session.GameId,
-            PlayerUsername = session.Players.FirstOrDefault()?.Username ?? "Waiting Player"
+            PlayerUsername = session.Players.FirstOrDefault()?.WebUsername ?? "Waiting Player"
         });
 
         return waitingGamesInfo;

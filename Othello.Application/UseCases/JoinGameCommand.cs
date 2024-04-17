@@ -1,13 +1,15 @@
 ﻿using MediatR;
 using Othello.Application.GameInterfaces;
+using Othello.Application.PlayerInterfaces;
 using Othello.Application.Sessions;
+using Othello.Domain;
 
 namespace Othello.Application.UseCases;
 
 public class JoinGameCommand : IRequest<JoinGameResult>
 {
     public Guid GameId { get; set; }
-    public string UserId { get; set; }
+    public string Username { get; set; }
 }
 
 public class JoinGameResult
@@ -39,7 +41,7 @@ public class JoinGameCommandHandler : IRequestHandler<JoinGameCommand, JoinGameR
         }
         
         // Assuming the second player info is passed with the request or created here
-        PlayerInfo secondPlayerInfo = new PlayerInfo(Guid.Parse(request.UserId), "SecondPlayerUsername", false);
+        PlayerInfo secondPlayerInfo = new PlayerInfo(request.Username, new HumanPlayer(CellState.Black, new ApiPlayerInputGetter()));
         session.Players.Add(secondPlayerInfo);
 
         // If this is the second player joining, start the game

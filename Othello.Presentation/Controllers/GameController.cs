@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Othello.Application.PlayerInterfaces;
 using Othello.Application.UseCases;
+using Othello.Presentation.RequestDTO;
 
 namespace Othello.Presentation.Controllers;
 
@@ -59,18 +60,32 @@ public class GameController : ControllerBase
 
     
     [HttpPost("{gameId}/move")]
-    public IActionResult MakeMove(Guid gameId, [FromBody] int row, int col)
+    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, [FromBody] MoveRequest move)
     {
-        _inputGetter.SetMove(gameId, row, col);
-        return Ok();
+        _inputGetter.SetMove(gameId, move.Row, move.Column); // Ensure the move is waiting for when it's this player's turn
+        var command = new MakeMoveCommand
+        {
+            GameId = gameId,
+            Row = move.Row,
+            Column = move.Column
+        };
+        var result = await _mediator.Send(command);
+        return result.IsValid ? Ok(result) : BadRequest(result.Message);
     }
+
     
     [HttpPost("{gameId}/undo")]
-    public IActionResult RequestUndo(Guid gameId)
+    public async Task<IActionResult> RequestUndo(Guid gameId)
     {
-        // Set undo in the undo service
+        // Trigger the undo request
         _undoRequestListener.RequestUndo(gameId);
-        return Ok("Undo request submitted.");
+
+        // Now call the UndoMoveCommand to handle the actual undo logic
+        var command = new UndoMoveCommand { GameId = gameId };
+        var result = await _mediator.Send(command);
+
+        // Return appropriate response based on the result of the undo operation
+        return result.MoveUndone ? Ok(result) : BadRequest(result.Message);
     }
     
     [HttpGet("{gameId}/hint")]

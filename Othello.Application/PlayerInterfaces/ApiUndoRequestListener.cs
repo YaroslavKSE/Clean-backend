@@ -9,22 +9,13 @@ public class ApiUndoRequestListener : IUndoRequestListener
 
     public void RequestUndo(Guid gameId)
     {
-        if (_pendingUndos.TryGetValue(gameId, out var source))
-        {
-            source.SetResult(true);
-            _pendingUndos.TryRemove(gameId, out var _);
-        }
+        var source = _pendingUndos.GetOrAdd(gameId, _ => new TaskCompletionSource<bool>());
+        source.TrySetResult(true); // This ensures that multiple requests don't overwrite each other
     }
 
     public Task<bool> WaitForUndoAsync(Guid gameId)
     {
-        if (_pendingUndos.TryGetValue(gameId, out var source))
-        {
-            return source.Task;
-        }
-
-        var newSource = new TaskCompletionSource<bool>();
-        _pendingUndos[gameId] = newSource;
-        return newSource.Task;
+        var source = _pendingUndos.GetOrAdd(gameId, _ => new TaskCompletionSource<bool>());
+        return source.Task;
     }
 }

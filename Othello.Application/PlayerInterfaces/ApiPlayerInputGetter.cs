@@ -6,7 +6,10 @@ namespace Othello.Application.PlayerInterfaces;
 public class ApiPlayerInputGetter : IPlayerInputGetter
 {
     private readonly ConcurrentDictionary<Guid, TaskCompletionSource<(int, int)>> _pendingMoves = new();
-
+    public ApiPlayerInputGetter()
+    {
+        
+    }
     public void AddMoveRequest(Guid gameId)
     {
         _pendingMoves.TryAdd(gameId, new TaskCompletionSource<(int, int)>());

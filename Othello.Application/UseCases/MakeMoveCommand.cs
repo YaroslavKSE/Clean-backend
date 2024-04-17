@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Othello.Application.GameInterfaces;
 using Othello.Application.PlayerInterfaces;
+using Othello.Domain.Interfaces;
 
 namespace Othello.Application.UseCases;
 
@@ -23,7 +24,7 @@ public class MakeMoveResult
 public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveResult>
 {
     private readonly IGameRepository _gameRepository;
-    private readonly ApiPlayerInputGetter _inputGetter;
+    private readonly IPlayerInputGetter _inputGetter;
 
     public MakeMoveCommandHandler(IGameRepository gameRepository, ApiPlayerInputGetter inputGetter)
     {

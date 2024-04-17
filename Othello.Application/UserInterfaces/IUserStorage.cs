@@ -5,5 +5,5 @@ namespace Othello.Application.UserInterfaces;
 public interface IUserStorage
 {
     Task<bool> AddAsync(User user);
-    Task<User> FindByUsernameAsync(string userId);
+    Task<User?> FindByUsernameAsync(string userId);
 }

@@ -11,9 +11,6 @@ public static class DependencyInjectionExtension
         // Register all infrastructure services here
         services.AddSingleton<IPlayerInputGetter, ApiPlayerInputGetter>();
         services.AddSingleton<IUndoRequestListener, ApiUndoRequestListener>();
-
-        // Add other infrastructure-specific services like database context, external services, etc.
-
         return services;
     }
 }

@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(); 
 builder.Services.AddApplicationServices();
 
 builder.Services.AddMediatR(cfg => 

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Othello.Application.GameInterfaces;
 using Othello.Application.PlayerInterfaces;
+using Othello.Domain.Interfaces;
 
 public class UndoMoveCommand : IRequest<UndoMoveResult>
 {
@@ -16,7 +17,7 @@ public class UndoMoveResult
 public class UndoMoveCommandHandler : IRequestHandler<UndoMoveCommand, UndoMoveResult>
 {
     private readonly IGameRepository _gameRepository;
-    private readonly ApiUndoRequestListener _undoRequestListener;
+    private readonly IUndoRequestListener  _undoRequestListener;
 
     public UndoMoveCommandHandler(IGameRepository gameRepository, ApiUndoRequestListener undoRequestListener)
     {

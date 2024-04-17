@@ -11,8 +11,8 @@ namespace Othello.Presentation.Controllers;
 public class GameController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private ApiPlayerInputGetter _inputGetter;
-    private ApiUndoRequestListener _undoRequestListener;
+    private readonly ApiPlayerInputGetter _inputGetter;
+    private readonly ApiUndoRequestListener _undoRequestListener;
 
     public GameController(IMediator mediator, ApiPlayerInputGetter inputGetter, ApiUndoRequestListener undoRequestListener)
     {

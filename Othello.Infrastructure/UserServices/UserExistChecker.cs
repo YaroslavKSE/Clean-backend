@@ -4,8 +4,8 @@ namespace Othello.Infrastructure.UserServices;
 
 public class UserExistChecker : IUserExistChecker
 {
-    public Task<bool> ExistsAsync(string id)
+    public Task<bool> ExistsAsync(string username)
     {
-        throw new NotImplementedException();
+        return InMemoryDatabase.ExistsUserAsync(username);
     }
 }

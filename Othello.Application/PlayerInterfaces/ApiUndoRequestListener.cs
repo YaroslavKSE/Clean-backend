@@ -6,7 +6,10 @@ namespace Othello.Application.PlayerInterfaces;
 public class ApiUndoRequestListener : IUndoRequestListener
 {
     private readonly ConcurrentDictionary<Guid, TaskCompletionSource<bool>> _pendingUndos = new();
-
+    public ApiUndoRequestListener()
+    {
+        
+    }
     public void RequestUndo(Guid gameId)
     {
         var source = _pendingUndos.GetOrAdd(gameId, _ => new TaskCompletionSource<bool>());

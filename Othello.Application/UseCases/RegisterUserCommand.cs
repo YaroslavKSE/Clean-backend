@@ -6,17 +6,16 @@ namespace Othello.Application.UseCases;
 
 public class RegisterUserCommand : IRequest<RegisterUserResult>
 {
-    public string UserId { get; set; }
     public string Username { get; set; }
-    public string Password { get; set; }
+    public string Password { get; set;}
     public string Email { get; set; }
 }
 
 public class RegisterUserResult
 {
-    public bool UserExists { get; set; }
-    public bool UserCreated { get; set; }
-    public string Message { get; set; }
+    public bool UserExists { get; init; }
+    public bool UserCreated { get; init; }
+    public string? Message { get; set; }
 }
 
 public class RegisterUserUseCase : IRequestHandler<RegisterUserCommand, RegisterUserResult>

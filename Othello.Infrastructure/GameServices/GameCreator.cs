@@ -21,19 +21,19 @@ public class GameCreator : IGameCreator
         _undoRequestListener = undoRequestListener;
     }
 
-    public Task<GameSession> CreateGameSession(string userId, string opponentType, string opponentName)
+    public Task<GameSession> CreateGameSession(string username, string opponentType)
     {
         var player1 = new HumanPlayer(CellState.Black, _playerInputGetter);
         Player player2;
 
-        if (opponentType.ToLower() == "cpu")
+        if (opponentType.ToLower() == "bot")
             player2 = new AIBot(CellState.White, _undoRequestListener); // Assume AI player
         else
             // Create a placeholder for the second human player, which will be replaced when a real player joins
             player2 = new HumanPlayer(CellState.White, _playerInputGetter);
 
-        var player1Info = new PlayerInfo(userId, player1);
-        var player2Info = opponentType.ToLower() == "cpu" ? new PlayerInfo("AiBot", player2) : null;
+        var player1Info = new PlayerInfo(username, player1);
+        var player2Info = opponentType.ToLower() == "bot" ? new PlayerInfo("AiBot", player2) : null;
 
         var session = new GameSession(player1Info, player2Info, null);
         _db.AddGameSessionAsync(session);

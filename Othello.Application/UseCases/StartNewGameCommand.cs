@@ -5,9 +5,9 @@ namespace Othello.Application.UseCases;
 
 public class StartNewGameCommand : IRequest<StartNewGameResult>
 {
-    public string UserId { get; set; }
+    public string Username { get; set; }
     public string OpponentType { get; set; } // "player" or "cpu"
-    public string OpponentName { get; set; } // Optional, mainly used if OpponentType is "player"
+
 }
 
 public class StartNewGameResult
@@ -28,12 +28,13 @@ public class StartNewGameCommandHandler : IRequestHandler<StartNewGameCommand, S
 
     public async Task<StartNewGameResult> Handle(StartNewGameCommand request, CancellationToken cancellationToken)
     {
+        
         // Create a new GameSession with the appropriate player and opponent
         var gameSession =
-            await _gameCreationService.CreateGameSession(request.UserId, request.OpponentType, request.OpponentName);
+            await _gameCreationService.CreateGameSession(request.Username, request.OpponentType);
 
         // If the opponent is a bot, start the game immediately
-        if (request.OpponentType.ToLower() == "cpu")
+        if (request.OpponentType.ToLower() == "bot")
         {
             gameSession.StartGame(); // This method would start the game
             return new StartNewGameResult

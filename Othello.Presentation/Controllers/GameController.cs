@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Othello.Application.PlayerInterfaces;
 using Othello.Application.UseCases;
+using Othello.Domain.Interfaces;
 using Othello.Presentation.RequestDTO;
 
 namespace Othello.Presentation.Controllers;
@@ -11,11 +12,11 @@ namespace Othello.Presentation.Controllers;
 public class GameController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ApiPlayerInputGetter _inputGetter;
-    private readonly ApiUndoRequestListener _undoRequestListener;
+    private readonly IPlayerInputGetter _inputGetter;
+    private readonly IUndoRequestListener _undoRequestListener;
 
-    public GameController(IMediator mediator, ApiPlayerInputGetter inputGetter,
-        ApiUndoRequestListener undoRequestListener)
+    public GameController(IMediator mediator, IPlayerInputGetter inputGetter,
+        IUndoRequestListener undoRequestListener)
     {
         _mediator = mediator;
         _inputGetter = inputGetter;

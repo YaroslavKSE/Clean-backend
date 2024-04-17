@@ -4,5 +4,5 @@ namespace Othello.Application.GameInterfaces;
 
 public interface IGameCreator
 {
-    Task<GameSession> CreateGameSession(string userId, string opponentType, string opponentName);
+    Task<GameSession> CreateGameSession(string username, string opponentType);
 }

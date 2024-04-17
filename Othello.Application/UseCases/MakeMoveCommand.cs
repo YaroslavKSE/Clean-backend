@@ -25,7 +25,7 @@ public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveR
     private readonly IGameRepository _gameRepository;
     private readonly IPlayerInputGetter _inputGetter;
 
-    public MakeMoveCommandHandler(IGameRepository gameRepository, ApiPlayerInputGetter inputGetter)
+    public MakeMoveCommandHandler(IGameRepository gameRepository, IPlayerInputGetter inputGetter)
     {
         _gameRepository = gameRepository;
         _inputGetter = inputGetter;

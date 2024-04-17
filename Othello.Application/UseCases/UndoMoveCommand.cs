@@ -19,7 +19,7 @@ public class UndoMoveCommandHandler : IRequestHandler<UndoMoveCommand, UndoMoveR
     private readonly IGameRepository _gameRepository;
     private readonly IUndoRequestListener _undoRequestListener;
 
-    public UndoMoveCommandHandler(IGameRepository gameRepository, ApiUndoRequestListener undoRequestListener)
+    public UndoMoveCommandHandler(IGameRepository gameRepository, IUndoRequestListener undoRequestListener)
     {
         _gameRepository = gameRepository;
         _undoRequestListener = undoRequestListener;

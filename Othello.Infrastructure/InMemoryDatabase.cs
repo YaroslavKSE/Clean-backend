@@ -14,7 +14,7 @@ public class InMemoryDatabase
     // User Operations
     public Task AddUserAsync(User user)
     {
-        Users[user.Username] = user; // Assumes User has a Username property
+        Users[user.Username] = user; 
         return Task.CompletedTask;
     }
 

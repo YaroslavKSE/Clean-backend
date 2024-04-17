@@ -1,5 +1,4 @@
 using Othello.Application.UserInterfaces;
-using Othello.Domain;
 using Web.Domain;
 
 namespace Othello.Infrastructure.UserServices;
@@ -12,11 +11,12 @@ public class UserStorage : IUserStorage
     {
         _db = db;
     }
-
+    
     public async Task<bool> AddAsync(User user)
     {
         if (await _db.ExistsUserAsync(user.Username))
             return false; // User already exists
+        
         await _db.AddUserAsync(user);
         return true;
     }

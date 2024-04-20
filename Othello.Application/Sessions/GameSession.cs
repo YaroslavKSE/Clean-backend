@@ -14,10 +14,16 @@ public class GameSession
     public GameSession(PlayerInfo player1Info, PlayerInfo? player2Info, IGameViewUpdater observer)
     {
         GameId = Guid.NewGuid();
-        Game = new Game(player1Info.OthelloPlayer, player1Info.OthelloPlayer, observer);
+        if (player2Info?.OthelloPlayer != null)
+        {
+            Game = new Game(player1Info.OthelloPlayer, player2Info.OthelloPlayer, observer);
+        }
+        
         StartTime = DateTime.UtcNow;
         Players.Add(player1Info); // Add first player info
-        if (player2Info != null) Players.Add(player2Info); // Add second player info if exists
+        if (player2Info != null) {
+            Players.Add(player2Info); // Add second player info if exists
+        }
     }
 
     // Wrapper methods to interact with the Game object

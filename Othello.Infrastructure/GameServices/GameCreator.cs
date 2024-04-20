@@ -1,5 +1,4 @@
 using Othello.Application.GameInterfaces;
-using Othello.Application.PlayerInterfaces;
 using Othello.Application.Sessions;
 using Othello.Domain;
 using Othello.Domain.Interfaces;
@@ -11,14 +10,15 @@ public class GameCreator : IGameCreator
     private readonly InMemoryDatabase _db;
     private readonly IPlayerInputGetter _playerInputGetter;
     private readonly IUndoRequestListener _undoRequestListener;
-    // private readonly IGameViewUpdater _gameViewUpdater;
+    private readonly IGameViewUpdater _gameViewUpdater;
 
     public GameCreator(InMemoryDatabase db, IPlayerInputGetter playerInputGetter,
-        IUndoRequestListener undoRequestListener)
+        IUndoRequestListener undoRequestListener, IGameViewUpdater gameViewUpdater)
     {
         _db = db;
         _playerInputGetter = playerInputGetter;
         _undoRequestListener = undoRequestListener;
+        _gameViewUpdater = gameViewUpdater;
     }
 
     public Task<GameSession> CreateGameSession(string username, string opponentType)
@@ -35,7 +35,7 @@ public class GameCreator : IGameCreator
         var player1Info = new PlayerInfo(username, player1);
         var player2Info = opponentType.ToLower() == "bot" ? new PlayerInfo("AiBot", player2) : null;
 
-        var session = new GameSession(player1Info, player2Info, null);
+        var session = new GameSession(player1Info, player2Info, _gameViewUpdater);
         _db.AddGameSessionAsync(session);
         return Task.FromResult(session);
     }

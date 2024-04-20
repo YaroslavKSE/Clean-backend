@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Othello.Application.PlayerInterfaces;
+using Othello.Application.Sessions;
 using Othello.Application.UseCases;
 using Othello.Domain.Interfaces;
 using Othello.Presentation.RequestDTO;
@@ -14,6 +14,7 @@ public class GameController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IPlayerInputGetter _inputGetter;
     private readonly IUndoRequestListener _undoRequestListener;
+    
 
     public GameController(IMediator mediator, IPlayerInputGetter inputGetter,
         IUndoRequestListener undoRequestListener)
@@ -22,7 +23,7 @@ public class GameController : ControllerBase
         _inputGetter = inputGetter;
         _undoRequestListener = undoRequestListener;
     }
-
+    
     [HttpPost("new")]
     public async Task<IActionResult> StartNewGame(StartNewGameCommand command)
     {
@@ -58,18 +59,26 @@ public class GameController : ControllerBase
 
 
     [HttpPost("{gameId}/move")]
-    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, [FromBody] MoveRequest move)
+    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, string username, 
+        [FromBody] MoveRequest move)
     {
         _inputGetter.SetMove(gameId, move.Row,
             move.Column); // Ensure the move is waiting for when it's this player's turn
         var command = new MakeMoveCommand
         {
             GameId = gameId,
+            Username = username,
             Row = move.Row,
             Column = move.Column
         };
         var result = await _mediator.Send(command);
-        return result.IsValid ? Ok(result) : BadRequest(result.Message);
+        if (result.IsValid)
+        {
+            return Ok(result);
+        }
+
+        return BadRequest(result.Message);
+        
     }
 
 

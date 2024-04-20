@@ -37,7 +37,7 @@ public class JoinGameCommandHandler : IRequestHandler<JoinGameCommand, JoinGameR
 
         // Assuming the second player info is passed with the request or created here
         var secondPlayerInfo =
-            new PlayerInfo(request.Username, new HumanPlayer(CellState.Black, new ApiPlayerInputGetter()));
+            new PlayerInfo(request.Username, new HumanPlayer(CellState.White, new ApiPlayerInputGetter()));
         session.Players.Add(secondPlayerInfo);
 
         // If this is the second player joining, start the game

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Othello.Application.GameInterfaces;
 using Othello.Application.UserInterfaces;
+using Othello.Domain.Interfaces;
 using Othello.Infrastructure.GameServices;
 using Othello.Infrastructure.UserServices;
 
@@ -17,7 +18,7 @@ public static class DependencyInjectionExtension
         
         services.AddScoped<IGameCreator, GameCreator>();
         services.AddScoped<IGameRepository, GameRepository>();
-        
+        services.AddSingleton<IGameViewUpdater, ConsoleView>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<ITokenGenerator>(provider =>
         {

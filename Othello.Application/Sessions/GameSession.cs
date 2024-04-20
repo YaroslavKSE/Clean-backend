@@ -18,18 +18,26 @@ public class GameSession
         {
             Game = new Game(player1Info.OthelloPlayer, player2Info.OthelloPlayer, observer);
         }
+        else
+        {
+            Game = new Game(player1Info.OthelloPlayer, null, observer);   
+        }
         
         StartTime = DateTime.UtcNow;
-        Players.Add(player1Info); // Add first player info
+        Players.Add(player1Info); 
         if (player2Info != null) {
-            Players.Add(player2Info); // Add second player info if exists
+            Players.Add(player2Info); 
         }
     }
-
-    // Wrapper methods to interact with the Game object
+    
     public bool MakeMove(int row, int col)
     {
         return Game.MakeMove(row, col);
+    }
+
+    public void AddSecondWebPlayer(Player secondPlayer)
+    {
+        Game.AddSecondPlayer(secondPlayer);
     }
 
     public void StartGame()

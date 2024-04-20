@@ -43,6 +43,7 @@ public class JoinGameCommandHandler : IRequestHandler<JoinGameCommand, JoinGameR
         // If this is the second player joining, start the game
         if (session.Players.Count == 2)
         {
+            session.AddSecondWebPlayer(secondPlayerInfo.OthelloPlayer);
             session.StartGame(); // Start the game now that both players are present
             await _gameRepository.JoinGameSessionAsync(session.GameId,
                 secondPlayerInfo); // Update the session in the repository

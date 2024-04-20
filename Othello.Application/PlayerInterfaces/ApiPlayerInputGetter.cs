@@ -9,11 +9,8 @@ public class ApiPlayerInputGetter : IPlayerInputGetter
     
     public void SetMove(Guid gameId, int row, int col)
     {
-        if (_pendingMoves.TryGetValue(gameId, out var source))
-        {
-            source.SetResult((row, col));
-            _pendingMoves.TryRemove(gameId, out _);
-        }
+        var source = _pendingMoves.GetOrAdd(gameId, _ => new TaskCompletionSource<(int, int)>());
+        source.SetResult((row, col));
     }
 
     public Task<(int row, int col)> WaitForMoveAsync(Guid gameId)

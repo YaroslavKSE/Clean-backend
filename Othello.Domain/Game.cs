@@ -214,4 +214,9 @@ public class Game
         NotifyObservers("Undo not allowed. No moves were made in the game.");
         return false;
     }
+
+    public void AddSecondPlayer(Player opponentPlayer)
+    {
+        OpponentPlayer = opponentPlayer;
+    }
 }

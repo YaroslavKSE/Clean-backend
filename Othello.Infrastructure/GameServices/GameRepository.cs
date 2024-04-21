@@ -1,5 +1,6 @@
 using Othello.Application.GameInterfaces;
 using Othello.Application.Sessions;
+using Web.Domain;
 
 namespace Othello.Infrastructure.GameServices;
 
@@ -28,5 +29,17 @@ public class GameRepository : IGameRepository
     {
         var session = await _db.GetGameSessionByIdAsync(gameId);
         return session;
+    }
+
+    public Task SaveChatMessageAsync(ChatMessage message)
+    {
+        _db.SaveChatMessageAsync(message);
+        return Task.CompletedTask;
+    }
+
+    public async Task<List<ChatMessage>> GetChatMessagesBySessionIdAsync(Guid gameSessionId)
+    {
+        var chat = await _db.GetChatMessagesBySessionIdAsync(gameSessionId);
+        return chat;
     }
 }

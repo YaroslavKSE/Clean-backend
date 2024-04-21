@@ -1,4 +1,5 @@
 ﻿using Othello.Application.Sessions;
+using Web.Domain;
 
 namespace Othello.Application.GameInterfaces;
 
@@ -12,4 +13,7 @@ public interface IGameRepository
 
     // Retrieves a game by its unique identifier
     Task<GameSession?> GetGameSessionByIdAsync(Guid gameId);
+
+    Task SaveChatMessageAsync(ChatMessage message);
+    Task<List<ChatMessage>> GetChatMessagesBySessionIdAsync(Guid gameId);
 }

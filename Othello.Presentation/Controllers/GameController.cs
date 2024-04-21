@@ -133,14 +133,5 @@ public class GameController : ControllerBase
         var result = await _mediator.Send(new GetHintsQuery {GameId = gameId});
         return Ok(result);
     }
-    //
-    // [HttpPost("{gameId}/chat")]
-    // public async Task<IActionResult> SendChatMessage([FromRoute] Guid gameId, SendChatMessageCommand command)
-    // {
-    //     command.GameId = gameId;
-    //     var result = await _mediator.Send(command);
-    //     return result.MessageSent ? (IActionResult)Ok("Message sent.") : BadRequest("Could not send the message.");
-    // }
 
-    // Add more command and query handlers as needed for actions like getting game statistics, handling move timeouts, etc.
 }

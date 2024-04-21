@@ -8,6 +8,7 @@ namespace Othello.Presentation.Controllers;
 
 [ApiController]
 [Route("api/users")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -11,6 +11,7 @@ public class InMemoryDatabase
     private static readonly ConcurrentDictionary<Guid, GameSession> Games = new();
     private static readonly ConcurrentDictionary<string, User> Users = new();
     private static readonly ConcurrentDictionary<string, GameStatistics> Statistics = new();
+    private static readonly ConcurrentDictionary<Guid, List<ChatMessage>> ChatMessages = new();
     
     // User Operations
     public Task AddUserAsync(User user)
@@ -31,10 +32,9 @@ public class InMemoryDatabase
     }
 
     // GameSession Operations
-    public Task AddGameSessionAsync(GameSession session)
+    public void AddGameSessionAsync(GameSession session)
     {
         Games[session.GameId] = session; // Overwrites existing session
-        return Task.CompletedTask;
     }
 
     public Task<IEnumerable<GameSession>> GetWaitingGameSessionsAsync()
@@ -72,4 +72,27 @@ public class InMemoryDatabase
     {
         Statistics[updatedStatistics.UserId.ToString()] = updatedStatistics;
     }
+    
+    public void SaveChatMessageAsync(ChatMessage message)
+    {
+        if (!ChatMessages.ContainsKey(message.GameSessionId))
+        {
+            // If no list exists for this game, create one and add the message
+            ChatMessages[message.GameSessionId] = new List<ChatMessage> { message };
+        }
+        else
+        {
+            // If a list already exists, add the message to it
+            ChatMessages[message.GameSessionId].Add(message);
+        }
+    }
+    public Task<List<ChatMessage>> GetChatMessagesBySessionIdAsync(Guid gameSessionId)
+    {
+        if (ChatMessages.TryGetValue(gameSessionId, out var messages))
+        {
+            return Task.FromResult(messages.ToList());
+        }
+        return Task.FromResult(new List<ChatMessage>());
+    }
+
 }

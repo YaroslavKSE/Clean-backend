@@ -57,7 +57,11 @@ public class Game
         UpdateBoardView();
         SwitchTurns();
         // bot move
-        OnMoveMade(new MoveEventArgs(row, col, OpponentPlayer));
+        if (CurrentPlayer is AIBot)
+        {
+            OnMoveMade(new MoveEventArgs(row, col, OpponentPlayer));
+        }
+        
         return true;
     }
 

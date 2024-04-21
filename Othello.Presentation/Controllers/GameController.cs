@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Othello.Application.Sessions;
 using Othello.Application.UseCases;
@@ -9,6 +10,7 @@ namespace Othello.Presentation.Controllers;
 
 [ApiController]
 [Route("api/games")]
+[Authorize]
 public class GameController : ControllerBase
 {
     private readonly IMediator _mediator;

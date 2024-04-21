@@ -6,7 +6,7 @@ public class GameStatistics
     public int TotalGamesPlayed { get; private set; }
     public int Wins { get; private set; }
     public int Losses { get; private set; }
-    public int Draws { get; private set; } // 
+    public int Draws { get; private set; } 
 
     public GameStatistics(Guid userId)
     {

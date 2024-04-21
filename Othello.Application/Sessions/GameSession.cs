@@ -1,3 +1,4 @@
+using Othello.Application.Statistics;
 using Othello.Domain;
 using Othello.Domain.Interfaces;
 
@@ -11,8 +12,11 @@ public class GameSession
     public DateTime StartTime { get; private set; }
     public bool IsGameOver => Game.IsGameOver;
 
-    public GameSession(PlayerInfo player1Info, PlayerInfo? player2Info, IGameViewUpdater observer)
+    private IStatisticsRepository _statisticsRepository;
+
+    public GameSession(PlayerInfo player1Info, PlayerInfo? player2Info, IGameViewUpdater observer, IStatisticsRepository statisticsRepository)
     {
+        _statisticsRepository = statisticsRepository;
         GameId = Guid.NewGuid();
         if (player2Info?.OthelloPlayer != null)
         {
@@ -32,7 +36,15 @@ public class GameSession
     
     public bool MakeMove(int row, int col)
     {
-        return Game.MakeMove(row, col);
+        var moveMade = Game.MakeMove(row, col);
+        if (Game.IsGameOver)
+        {
+            Game.EndGame();
+            UpdateGameStatistics();
+        }
+
+        return moveMade;
+
     }
 
     public void AddSecondWebPlayer(Player secondPlayer)
@@ -59,6 +71,33 @@ public class GameSession
     {
         return Game.CalculateScore();
     }
+    private void UpdateGameStatistics()
+    {
+        // Assuming you have some sort of repository or service where you manage statistics.
+        var player1Stats = _statisticsRepository.GetOrCreateStatistics(Players[0].WebUsername);
+        var player2Stats = _statisticsRepository.GetOrCreateStatistics(Players[1].WebUsername);
+
+        var finalScore = Game.CalculateScore();
+        if (finalScore[CellState.Black] > finalScore[CellState.White])
+        {
+            player1Stats.RecordWin();
+            player2Stats.RecordLoss();
+        }
+        else if (finalScore[CellState.Black] < finalScore[CellState.White])
+        {
+            player1Stats.RecordLoss();
+            player2Stats.RecordWin();
+        }
+        else
+        {
+            player1Stats.RecordDraw();
+            player2Stats.RecordDraw();
+        }
+
+        _statisticsRepository.UpdateStatistics(player1Stats);
+        _statisticsRepository.UpdateStatistics(player2Stats);
+    }
+
 }
 
 public class PlayerInfo

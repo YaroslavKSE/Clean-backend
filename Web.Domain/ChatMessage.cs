@@ -16,6 +16,4 @@ public class ChatMessage
         MessageText = messageText;
         Timestamp = DateTime.UtcNow;
     }
-
-    
 }

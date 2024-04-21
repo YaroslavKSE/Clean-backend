@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Othello.Application.GameInterfaces;
+using Othello.Application.Statistics;
 using Othello.Application.UserInterfaces;
 using Othello.Domain.Interfaces;
 using Othello.Infrastructure.GameServices;
 using Othello.Infrastructure.UserServices;
+using Othello.Infrastructure.UserStatistics;
 
 namespace Othello.Infrastructure;
 
@@ -15,7 +17,7 @@ public static class DependencyInjectionExtension
         // Register all infrastructure services here
         services.AddScoped<IUserStorage, UserStorage>();
         services.AddScoped<IUserExistChecker, UserExistChecker>();
-        
+        services.AddSingleton<IStatisticsRepository, StatisticsRepository>();
         services.AddScoped<IGameCreator, GameCreator>();
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddSingleton<IGameViewUpdater, ConsoleView>();

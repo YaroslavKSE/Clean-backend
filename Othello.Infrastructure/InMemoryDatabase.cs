@@ -10,7 +10,8 @@ public class InMemoryDatabase
     // Using ConcurrentDictionary for thread-safe operations
     private static readonly ConcurrentDictionary<Guid, GameSession> Games = new();
     private static readonly ConcurrentDictionary<string, User> Users = new();
-
+    private static readonly ConcurrentDictionary<string, GameStatistics> Statistics = new();
+    
     // User Operations
     public Task AddUserAsync(User user)
     {
@@ -60,5 +61,15 @@ public class InMemoryDatabase
     {
         Games.TryGetValue(gameId, out var session);
         return Task.FromResult(session);
+    }
+    
+    public GameStatistics GetOrCreateStatistics(string username)
+    {
+        return Statistics.GetOrAdd(username, new GameStatistics(Guid.NewGuid()));
+    }
+
+    public void UpdateStatistics(GameStatistics updatedStatistics)
+    {
+        Statistics[updatedStatistics.UserId.ToString()] = updatedStatistics;
     }
 }

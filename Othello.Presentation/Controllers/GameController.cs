@@ -62,8 +62,6 @@ public class GameController : ControllerBase
     public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, string username, 
         [FromBody] MoveRequest move)
     {
-        _inputGetter.SetMove(gameId, move.Row,
-            move.Column); // Ensure the move is waiting for when it's this player's turn
         var command = new MakeMoveCommand
         {
             GameId = gameId,

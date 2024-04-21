@@ -14,6 +14,8 @@ public class Game
 
     private readonly Stack<Move> _moveHistory = new();
     public Dictionary<CellState, int> Score => CalculateScore();
+    
+    public event EventHandler<MoveEventArgs> MoveMade;
 
     public Game(Player player1, Player player2, IGameViewUpdater observer)
     {
@@ -54,6 +56,8 @@ public class Game
         Board.MarkCell(row, col, CurrentPlayer.Color);
         UpdateBoardView();
         SwitchTurns();
+        // bot move
+        OnMoveMade(new MoveEventArgs(row, col, OpponentPlayer));
         return true;
     }
 
@@ -218,5 +222,9 @@ public class Game
     public void AddSecondPlayer(Player opponentPlayer)
     {
         OpponentPlayer = opponentPlayer;
+    }
+    protected virtual void OnMoveMade(MoveEventArgs e)
+    {
+        MoveMade(this, e);
     }
 }

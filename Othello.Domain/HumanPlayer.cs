@@ -11,15 +11,19 @@ public class HumanPlayer : Player
 
     private readonly IPlayerInputGetter _inputGetter;
 
-    public override async Task MakeMoveAsync(Guid gameId, Game gameBoard)
+    public override Task MakeMoveAsync(Game gameBoard)
     {
-        var (row, col) = await _inputGetter.WaitForMoveAsync(gameId);
-        gameBoard.MakeMove(row - 1, col - 1);
+        return Task.CompletedTask;
     }
 
 
     public override string GetTurnMessageNotification()
     {
         return $"Player {Color}'s turn. Please enter your move (row col):";
+    }
+
+    public override void SetGameForBot(Game game)
+    {
+        throw new InvalidOperationException("Human is not bot");
     }
 }

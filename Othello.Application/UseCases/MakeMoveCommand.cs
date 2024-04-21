@@ -34,13 +34,24 @@ public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveR
     public async Task<MakeMoveResult> Handle(MakeMoveCommand request, CancellationToken cancellationToken)
     {
         var session = await _gameRepository.GetGameSessionByIdAsync(request.GameId);
-        if (session == null) return new MakeMoveResult {IsValid = false, Message = "Game session not found."};
+        if (session == null)
+        {
+            return new MakeMoveResult {IsValid = false, Message = "Game session not found."};
+        }
+
+        if (session.Players.Count == 1)
+        {
+            return new MakeMoveResult {IsValid = false, Message = "Can't make move while waiting for other player"};
+        }
 
         var currentPlayer = session.Players.FindByUserId(request.Username);
         if (session.Game.CurrentPlayer != currentPlayer?.OthelloPlayer)
+        {
             return new MakeMoveResult {IsValid = false, Message = "Not your turn."};
-
-        await currentPlayer.OthelloPlayer.MakeMoveAsync(request.GameId, session.Game);
+        }
+        
+        session.MakeMove(request.Row - 1, request.Column - 1);
+       
         return new MakeMoveResult {IsValid = true, Message = "Move made successfully."};
     }
 }

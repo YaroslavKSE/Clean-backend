@@ -27,7 +27,9 @@ public class GameCreator : IGameCreator
         Player player2;
 
         if (opponentType.ToLower() == "bot")
-            player2 = new AIBot(CellState.White, _undoRequestListener); // Assume AI player
+        {
+            player2 = new AIBot(CellState.White); // Assume AI player
+        }
         else
             // Create a placeholder for the second human player, which will be replaced when a real player joins
             player2 = new HumanPlayer(CellState.White, _playerInputGetter);
@@ -36,6 +38,10 @@ public class GameCreator : IGameCreator
         var player2Info = opponentType.ToLower() == "bot" ? new PlayerInfo("AiBot", player2) : null;
 
         var session = new GameSession(player1Info, player2Info, _gameViewUpdater);
+        if (opponentType.ToLower() == "bot")
+        {
+            player2.SetGameForBot(session.Game);
+        }
         _db.AddGameSessionAsync(session);
         return Task.FromResult(session);
     }

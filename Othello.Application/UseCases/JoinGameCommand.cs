@@ -11,6 +11,11 @@ public class JoinGameCommand : IRequest<JoinGameResult>
     public Guid GameId { get; set; }
     public string Username { get; set; }
 }
+public class JoinGameRequest
+{
+    public Guid GameId { get; set; }
+}
+
 
 public class JoinGameResult
 {

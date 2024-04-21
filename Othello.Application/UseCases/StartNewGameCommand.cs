@@ -5,10 +5,15 @@ namespace Othello.Application.UseCases;
 
 public class StartNewGameCommand : IRequest<StartNewGameResult>
 {
-    public string Username { get; set; }
+    public string Username { get; init; }
     public string OpponentType { get; set; } // "player" or "cpu"
 
 }
+public class StartNewGameRequest
+{
+    public string OpponentType { get; set; } // "player" or "cpu"
+}
+
 
 public class StartNewGameResult
 {

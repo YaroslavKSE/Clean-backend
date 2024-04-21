@@ -27,9 +27,21 @@ public class GameController : ControllerBase
     }
     
     [HttpPost("new")]
-    public async Task<IActionResult> StartNewGame(StartNewGameCommand command)
+    public async Task<IActionResult> StartNewGame([FromBody] StartNewGameRequest request)
     {
+        string username = User.Identity?.Name; // Get the username from the token
+        if (string.IsNullOrEmpty(username))
+        {
+            return Unauthorized("User is not authenticated.");
+        }
+
+        var command = new StartNewGameCommand
+        {
+            Username = username,
+            OpponentType = request.OpponentType
+        };
         var result = await _mediator.Send(command);
+        
         if (result.GameId != Guid.Empty)
         {
             if (result.GameStarted)
@@ -51,8 +63,20 @@ public class GameController : ControllerBase
     }
 
     [HttpPost("join")]
-    public async Task<IActionResult> JoinGame(JoinGameCommand command)
+    public async Task<IActionResult> JoinGame([FromBody] JoinGameRequest request)
     {
+        string username = User.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
+        {
+            return Unauthorized("User is not authenticated.");
+        }
+        
+        var command = new JoinGameCommand
+        {
+            GameId = request.GameId,
+            Username = username
+        };
+        
         var result = await _mediator.Send(command);
         if (result.GameJoined) return Ok(new {result.Message});
 
@@ -61,9 +85,16 @@ public class GameController : ControllerBase
 
 
     [HttpPost("{gameId}/move")]
-    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, string username, 
-        [FromBody] MoveRequest move)
+    public async Task<IActionResult> MakeMove([FromRoute] Guid gameId, [FromBody] MoveRequest move)
     {
+        // Get the username from the claims
+        string username = User.Identity?.Name;
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return BadRequest("User is not recognized.");
+        }
+        
         var command = new MakeMoveCommand
         {
             GameId = gameId,

@@ -23,12 +23,10 @@ public class MakeMoveResult
 public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveResult>
 {
     private readonly IGameRepository _gameRepository;
-    private readonly IPlayerInputGetter _inputGetter;
 
-    public MakeMoveCommandHandler(IGameRepository gameRepository, IPlayerInputGetter inputGetter)
+    public MakeMoveCommandHandler(IGameRepository gameRepository)
     {
         _gameRepository = gameRepository;
-        _inputGetter = inputGetter;
     }
 
     public async Task<MakeMoveResult> Handle(MakeMoveCommand request, CancellationToken cancellationToken)
@@ -50,8 +48,12 @@ public class MakeMoveCommandHandler : IRequestHandler<MakeMoveCommand, MakeMoveR
             return new MakeMoveResult {IsValid = false, Message = "Not your turn."};
         }
         
-        session.MakeMove(request.Row - 1, request.Column - 1);
-       
-        return new MakeMoveResult {IsValid = true, Message = "Move made successfully."};
+        var moveMade =  session.MakeMove(request.Row - 1, request.Column - 1);
+        if (moveMade)
+        {
+            return new MakeMoveResult {IsValid = true, Message = "Move made successfully."};
+        }
+        
+        return new MakeMoveResult {IsValid = false, Message = "Something went wrong. Please try again."};
     }
 }

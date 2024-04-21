@@ -10,9 +10,8 @@ public class GameSession
     public Game Game { get; private set; }
     public List<PlayerInfo> Players { get; private set; } = [];
     public DateTime StartTime { get; private set; }
-    public bool IsGameOver => Game.IsGameOver;
 
-    private IStatisticsRepository _statisticsRepository;
+    private readonly IStatisticsRepository _statisticsRepository;
 
     public GameSession(PlayerInfo player1Info, PlayerInfo? player2Info, IGameViewUpdater observer, IStatisticsRepository statisticsRepository)
     {
@@ -37,7 +36,8 @@ public class GameSession
     public bool MakeMove(int row, int col)
     {
         var moveMade = Game.MakeMove(row, col);
-        if (Game.IsGameOver)
+        var gameOver = CheckGameOver();
+        if (gameOver)
         {
             Game.EndGame();
             UpdateGameStatistics();
@@ -62,12 +62,17 @@ public class GameSession
         return Game.ShowHints();
     }
 
+    public bool CheckGameOver()
+    {
+        return Game.CheckGameOver();
+    }
+
     public bool UndoMove()
     {
         return Game.UndoMove();
     }
 
-    public Dictionary<CellState, int> GetScore()
+    private Dictionary<CellState, int> GetScore()
     {
         return Game.CalculateScore();
     }
@@ -77,7 +82,7 @@ public class GameSession
         var player1Stats = _statisticsRepository.GetOrCreateStatistics(Players[0].WebUsername);
         var player2Stats = _statisticsRepository.GetOrCreateStatistics(Players[1].WebUsername);
 
-        var finalScore = Game.CalculateScore();
+        var finalScore = GetScore();
         if (finalScore[CellState.Black] > finalScore[CellState.White])
         {
             player1Stats.RecordWin();
